@@ -2,7 +2,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Echarts from '../views/Echarts.vue'
-import Notes from '../views/Notes.vue'
+import VueNotes from '../docs/VueNotes.md'
+import DelphiNotes from '../docs/DelphiNotes.md'
+import MarkdownNotes from '../docs/MarkdownNotes.md'
+
+// 解决路由重复报错 Avoided redundant navigation to current location: "/vue".
+const originalPush = VueRouter.prototype.push
+   VueRouter.prototype.push = function push(location) {
+   return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.use(VueRouter)
 
@@ -18,9 +26,19 @@ Vue.use(VueRouter)
     component: Echarts
   },
   {
-    path: '/notes',
-    name: 'Notes',
-    component: Notes
+    path: '/vue',
+    name: 'VueNotes',
+    component: VueNotes
+  },
+  {
+    path: '/delphi',
+    name: 'DelphiNotes',
+    component: DelphiNotes
+  },
+  {
+    path: '/markdown',
+    name: 'MarkdownNotes',
+    component: MarkdownNotes
   },
 ]
 

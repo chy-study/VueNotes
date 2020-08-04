@@ -1,9 +1,9 @@
 <template>
-  <el-container>
-    <el-header>
+  <el-container ref="homePage" style="width: 100%">
+    <el-header :class="{m_down : isScroll}">
       <div style="margin-top: 0px">
         <h1 style="display: block; margin: 0; float: left; ">
-          <a href="/"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -10px"></a>
+          <a href="/"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -5px"></a>
         </h1>
 
         <ul style="list-style:none; ">
@@ -14,7 +14,28 @@
             <router-link to="/echarts">Echarts</router-link>
           </li>
           <li class="m_li">
-            <router-link to="/notes">Notes</router-link>
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                Notes<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="vNotes">
+                  Vue笔记
+                </el-dropdown-item>
+                <el-dropdown-item command="sNotes" :divided="true">
+                  SpringBoot笔记
+                </el-dropdown-item>
+                <el-dropdown-item command="dNotes" :divided="true">
+                  Delphi笔记
+                </el-dropdown-item>
+                <el-dropdown-item command="mNotes" :divided="true">
+                  Markdown语法
+                </el-dropdown-item>
+                <el-dropdown-item command="mNotes" :divided="true">
+                  Git
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </li>
           <li class="m_li" :title="themeTitle">
             <el-dropdown trigger="click" :hide-on-click="false">
@@ -30,7 +51,7 @@
                     active-color="#A9A9A9">
                   </el-switch>
                 </el-dropdown-item>
-                <el-dropdown-item>
+                <el-dropdown-item :divided="true">
                   <div class="block">
                     <span class="demonstration">自定义</span>
                     <el-color-picker @change="pickerChangeBgc" @active-change="pickerChangeBgc" v-model="pickerColor" size="small" style="float: right;"></el-color-picker>
@@ -54,8 +75,8 @@
       </div>
     </el-header>
 
-    <el-main height="2000px"> 
-        <router-view></router-view>
+    <el-main ref="main">
+      <router-view></router-view>
     </el-main>
   </el-container>
 </template>
@@ -64,14 +85,19 @@
   export default {
     data() {
       return {
+        clientHeight: '',
         input: '',
         isDark: false,
+        isScroll: false,
         pickerColor: '#ffffff',
         themeTitle: '更改主体颜色',
         aboutTitle: '关于我'
       }
     },
     methods: {
+      changeFixed(clientHeight){
+        this.$refs.homePage.$el.style.height = clientHeight-1+'px';
+      },
       switchChangeBgc(val) {
         console.log(val);
         if (val) {
@@ -85,12 +111,72 @@
       pickerChangeBgc(val) {
         console.log(val);
         document.body.style.backgroundColor = val;
+      },
+      handleCommand(val) {
+        switch(val){
+          case "vNotes":
+            this.goTovNotes();
+            break;
+          case "sNotes":
+            this.goTosNotes();
+            break;
+          case "dNotes":
+            this.goTodNotes();
+            break;
+          case "mNotes":
+            this.goTomNotes();
+            break;
+        }
+      },
+      goTovNotes() {
+        this.$router.push("/vue")
+      },
+      goTosNotes() {
+        this.$router.push("/springboot")
+      },
+      goTodNotes() {
+        this.$router.push("/delphi")
+      },
+      goTomNotes() {
+        this.$router.push("/markdown")
+      },
+    },
+    mounted(){   
+      this.clientHeight = document.documentElement.clientHeight;
+      // onresize 事件会在窗口或框架被调整大小时发生。         
+      window.onresize = () => {
+        this.clientHeight = document.documentElement.clientHeight;
+      };
+      //监听main的滚动条
+      this.$refs.main.$el.addEventListener('scroll', e => {
+        console.log('相对距离', this.$refs.main.$el.scrollTop)
+        console.log('绝对距离', e.target.offsetTop + this.$refs.main.$el.scrollTop)
+        if (this.$refs.main.$el.scrollTop > 0) {
+          this.isScroll = true
+        } else {
+          this.isScroll = false
+        }
+      }, true)
+    },
+    watch: {
+      // 如果clientHeight发生改变，这个函数就会运行
+      clientHeight: function () {
+        this.changeFixed(this.clientHeight)
       }
     },
   }
 </script>
 
 <style>
+
+  body {
+    overflow: hidden;
+    margin: 0;
+    background-image: url(https://wallroom.io/img/1920x1080/bg-976058f.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    -moz-background-size:100% 100%;
+  }
   .el-header {
     /*background-color: #B3C0D1;*/
     color: #333;
@@ -102,34 +188,31 @@
   .el-main {
     /*background-color: #E9EEF3;*/
     color: #333;
-    line-height: 30px;
+    line-height: 30px;  
   }
   
   body > .el-container {
     margin-bottom: 40px;
   }
-  
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-
-  }
-  
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
 
   .el-dropdown-link {
     cursor: pointer;
-    color: #409EFF;
+    color: black;
+    font-size: 16px;
   }
   .el-icon-arrow-down {
-    font-size: 12px;
+    font-size: 10px;
   }
 
   .m_li {
     float: left;
-    margin-left: 30px
+    margin-left: 30px;
+    color: black;
+    font-size: 16px;
+  }
+
+  .m_li a {
+    color: black;
   }
 
   a {
@@ -138,6 +221,11 @@
 
   .router-link-active {
     text-decoration: none;
+  }
+
+  /* 主菜单下面的阴影 */
+  .m_down {
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,.1); 
   }
 
   /* 在全局CSS里引用: */
