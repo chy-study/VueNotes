@@ -1,6 +1,6 @@
 <template>
   <el-container ref="homePage" style="width: 100%">
-    <el-header :class="{m_down : isScroll}">
+    <el-header :class="{m_down : isScroll}" v-if="$route.path!=='/login'">
       <div style="margin-top: 0px">
         <h1 style="display: block; margin: 0; float: left; ">
           <a href="/"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -5px"></a>
@@ -172,7 +172,7 @@
   body {
     overflow: hidden;
     margin: 0;
-    background-image: url(https://wallroom.io/img/1920x1080/bg-976058f.jpg);
+    /*background-image: url(https://wallroom.io/img/1920x1080/bg-976058f.jpg);*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
     -moz-background-size:100% 100%;
