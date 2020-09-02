@@ -144,7 +144,9 @@ export default {
 //               _this.$store.commit('SET_USERINFO', res.data.data)
 //               _this.$router.push("/blogs")
 //             })
-			_this.$router.push('/')
+			_this.$router.push({
+				path: '/blogList',
+				})
           } else {
             console.log('error submit!!');
             return false;
@@ -234,13 +236,20 @@ export default {
       star.draw(this.context);
     }
   },
-  mounted() {
-    this.canvas = document.getElementById("myCanvas");
-    this.context = this.canvas.getContext("2d");
+	mounted() {
+		this.canvas = document.getElementById("myCanvas");
+		this.context = this.canvas.getContext("2d");
 
-    this.createStar(true);
-    this.drawFrame();
-  }
+		this.createStar(true);
+		this.drawFrame();
+		this.$notify({
+		        title: '提示：',
+		        message: '本站暂未开放注册功能',
+				// 向下偏移
+		        offset: 0,
+		        duration: 2000
+		});
+	},
 };
 </script>
 
