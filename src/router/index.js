@@ -20,7 +20,7 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Index',
-    redirect: {name: 'BlogList'}
+    redirect: {name: 'Blogs'}
   },
   {
     path: '/echarts',
@@ -48,10 +48,10 @@ Vue.use(VueRouter)
     component: Login
   },
   {
-    path: '/blogList',
-    name: 'BlogList',
+    path: '/blogs',
+    name: 'Blogs',
     // 懒加载
-    component: () => import('../views/BlogList.vue')
+    component: () => import('../views/Blogs.vue')
   },
   {
     path: '/blog/add',

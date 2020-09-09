@@ -18,7 +18,7 @@
       >
         <el-form-item
           label=""
-          prop="userName"
+          prop="username"
           style="margin-top:40px;"
         >
           <el-row>
@@ -29,14 +29,14 @@
               <el-input
                 class="inps"
                 placeholder='用户名'
-                v-model="loginForm.userName"
+                v-model="loginForm.username"
               ></el-input>
             </el-col>
           </el-row>
         </el-form-item>
         <el-form-item
           label=""
-          prop="passWord"
+          prop="password"
         >
           <el-row>
             <el-col :span='2'>
@@ -46,7 +46,7 @@
               <el-input
                 class="inps"
                 placeholder='密码'
-                v-model="loginForm.passWord"
+                v-model="loginForm.password"
               ></el-input>
             </el-col>
           </el-row>
@@ -117,14 +117,14 @@ export default {
       width: window.innerHeight,
       height: window.innerHeight,
       loginForm: {
-        userName: "",
-        passWord: ""
+        username: "",
+        password: ""
       },
       loginRules: {
-        userName: [
+        username: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
-        passWord: [
+        password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: "change"}
         ]
@@ -138,15 +138,14 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // 提交逻辑
-//             this.$axios.post('http://localhost:8081/login', this.ruleForm).then((res)=>{
-//               const token = res.headers['authorization']
-//               _this.$store.commit('SET_TOKEN', token)
-//               _this.$store.commit('SET_USERINFO', res.data.data)
-//               _this.$router.push("/blogs")
-//             })
-			_this.$router.push({
-				path: '/blogList',
-				})
+            this.$axios.post('/login', this.loginForm).then((res)=>{
+              const jwt = res.headers['authorization']
+              const userInfo = res.data.data
+              // 把数据共享出去
+              _this.$store.commit('SET_TOKEN', jwt)
+              _this.$store.commit('SET_USERINFO', userInfo)
+              _this.$router.push("/blogs")
+            })
           } else {
             console.log('error submit!!');
             return false;

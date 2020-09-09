@@ -3,7 +3,7 @@
     <el-header :class="{m_down : isScroll}" v-if="$route.path!=='/login'">
       <div style="margin-top: 0px">
         <h1 style="display: block; margin: 0; float: left; ">
-          <a href="#" @click="drawer = true"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -5px"></a>
+          <a href="javascript:void(0)" @click="drawer = true"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -5px"></a>
         </h1>
 
         <ul style="list-style:none; ">
@@ -62,7 +62,7 @@
           </li>
 
            <li class="m_li" style="float: right" v-show="hasLogin">
-            <el-button @click="logout" type="primary" icon="el-icon-ice-cream-round">退出</el-button>
+            <el-button @click="logout()" type="primary" icon="el-icon-ice-cream-round">退出</el-button>
           </li>
 
           <li class="m_li" style="float: right">
@@ -81,6 +81,16 @@
           :visible.sync="drawer"
           :with-header="false"
           :show-close="true">
+
+          <div v-show="!hasLogin">
+            <h4>你还没有登陆</h4>
+          </div>
+
+          <div v-show="hasLogin">
+            <el-avatar :src="user.avatar" style="margin-top: 20px"></el-avatar>
+            <h4 style="color: #3399ff">{{user.username}}</h4>
+          </div>
+
           <h4>选择主题：</h4>
           <li class="m_li" :title="themeTitle">
             <el-dropdown trigger="click" :hide-on-click="false">
@@ -124,6 +134,10 @@
         aboutTitle: '关于我',
         drawer: false,
         hasLogin: false,
+        user: {
+          username: '请先登录',
+          avatar: 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
+        }
       }
     },
     methods: {
@@ -172,22 +186,26 @@
       goTomNotes() {
         this.$router.push("/markdown")
       },
-      open() {
-        const h = this.$createElement;
-
-        this.$notify({
-          // 关闭时间
-          duration: 2000,
-          // 显示关闭图标
-          showClose: false,
-          // 向下偏移
-          offset: 50,
-          title: '美好的一天',
-          message: h('i', { style: 'color: teal'}, '欢迎登陆')
-        });
-      },
       login() {
         this.$router.push("login")
+      },
+      logout() {
+        const _this = this
+        _this.$axios.get("/logout",{
+          headers: {
+            "Authorization": localStorage.getItem("token")
+          }
+        }).then(res => {
+          _this.$store.commit("REMOVE_INFO")
+          _this.$router.push("/login")
+        })
+      }
+    },
+    created() {
+      if (this.$store.getters.getUser.username) {
+        this.user.username = this.$store.getters.getUser.username
+        this.user.avatar = this.$store.getters.getUser.avatar
+        this.hasLogin = true
       }
     },
     mounted(){   
@@ -206,9 +224,6 @@
           this.isScroll = false
         }
       }, true);
-      // if (this.fromLogin == true) {
-      //   this.open();
-      // }
     },
     watch: {
       // 如果clientHeight发生改变，这个函数就会运行
