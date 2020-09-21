@@ -1,12 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Echarts from '../views/Echarts.vue'
-import VueNotes from '../docs/VueNotes.md'
-import DelphiNotes from '../docs/DelphiNotes.md'
-import MarkdownNotes from '../docs/MarkdownNotes.md'
 import Login from '../views/Login.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import BlogEdit from '../views/BlogEdit.vue'
+import Echarts from '../views/Echarts.vue';
 
 // 解决路由重复报错 Avoided redundant navigation to current location: "/vue".
 const originalPush = VueRouter.prototype.push
@@ -21,26 +18,6 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Index',
     redirect: {name: 'Blogs'}
-  },
-  {
-    path: '/echarts',
-    name: 'Echarts',
-    component: Echarts
-  },
-  {
-    path: '/vue',
-    name: 'VueNotes',
-    component: VueNotes
-  },
-  {
-    path: '/delphi',
-    name: 'DelphiNotes',
-    component: DelphiNotes
-  },
-  {
-    path: '/markdown',
-    name: 'MarkdownNotes',
-    component: MarkdownNotes
   },
   {
     path: '/login',
@@ -73,7 +50,15 @@ Vue.use(VueRouter)
       requireAuth: true
     },
     component: BlogEdit
-  }
+  },
+  {
+    path: '/echarts',
+    name: 'Echarts',
+    // meta: {
+    //   requireAuth: true
+    // },
+    component: Echarts
+  },
 ]
 
 const router = new VueRouter({

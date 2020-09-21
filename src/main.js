@@ -10,6 +10,7 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
 import './axios'
+import './permission'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false

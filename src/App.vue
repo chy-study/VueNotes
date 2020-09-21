@@ -19,40 +19,23 @@
                 <el-dropdown-item command="add">
                   写博客
                 </el-dropdown-item>
-                <el-dropdown-item command="list" :divided="true">
-                  博客列表
-                </el-dropdown-item>
+<!--                <el-dropdown-item command="list" :divided="true">-->
+<!--                  博客列表-->
+<!--                </el-dropdown-item>-->
               </el-dropdown-menu>
             </el-dropdown>
           </li>
+<!--          <li class="m_li">-->
+<!--            <el-dropdown @command="handleCommand" trigger="click" :hide-on-click="false" >-->
+<!--              <span class="el-dropdown-link">-->
+<!--                用户管理<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+<!--              </span>-->
+<!--            </el-dropdown>-->
+<!--          </li>-->
           <li class="m_li">
             <router-link to="/echarts">数据统计</router-link>
           </li>
-         <!--  <li class="m_li">
-            <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
-                Notes<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="vNotes">
-                  Vue笔记
-                </el-dropdown-item>
-                <el-dropdown-item command="sNotes" :divided="true">
-                  SpringBoot笔记
-                </el-dropdown-item>
-                <el-dropdown-item command="dNotes" :divided="true">
-                  Delphi笔记
-                </el-dropdown-item>
-                <el-dropdown-item command="mNotes" :divided="true">
-                  Markdown语法
-                </el-dropdown-item>
-                <el-dropdown-item command="mNotes" :divided="true">
-                  Git
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </li> -->
-          
+
           <li class="m_li" :title="aboutTitle">
             <el-link disabled>About</el-link>
           </li>
@@ -239,7 +222,7 @@
   body {
     overflow: hidden;
     margin: 0;
-    background-image: url(https://wallroom.io/img/1920x1080/bg-976058f.jpg);
+    /*background-image: url(https://wallroom.io/img/1920x1080/bg-976058f.jpg);*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
     -moz-background-size:100% 100%;
