@@ -170,7 +170,7 @@
         this.$router.push("/markdown")
       },
       login() {
-        this.$router.push("login")
+        this.$router.push("/login")
       },
       logout() {
         const _this = this

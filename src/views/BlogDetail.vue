@@ -7,7 +7,10 @@
                     编辑
                 </router-link>
             </el-link>
-            <el-tag type="success" style="float: right">阅读量：{{blog.views}}</el-tag>
+            <el-link icon="el-icon-delete" v-if="ownBlog" @click="deleteThisBlog()" style="margin-left: 20px; color: #6e9eff">
+                删除
+            </el-link>
+            <el-tag type="success" style="float: right;">阅读量：{{blog.views}}</el-tag>
         </div>
         <!-- 分割线 -->
         <el-divider></el-divider>
@@ -51,6 +54,34 @@ export default {
                 //是否是当前用户发表的博客
                 _this.ownBlog = (res.data.data.userId ===  _this.$store.getters.getUser.id)
             })
+        }
+    },
+    methods: {
+        deleteThisBlog() {
+            const _this = this
+            this.$confirm('确认删除该博客？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$axios.delete('/blog/deleteBlogById?id='+_this.blog.id,{
+                    headers: {
+                        "Authorization": localStorage.getItem("token")
+                    }
+                }).then(res => {
+                    console.log(res)
+                    _this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    _this.$router.push('/')
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     }
 }
