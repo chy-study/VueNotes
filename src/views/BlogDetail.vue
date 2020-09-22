@@ -1,11 +1,14 @@
 <template>
     <div class="m_detail">
         <h1> {{blog.title}} </h1>
-        <el-link icon="el-icon-edit" v-if="ownBlog">
-            <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}">
-                编辑
-            </router-link>
-        </el-link>
+        <div>
+            <el-link icon="el-icon-edit" v-if="ownBlog">
+                <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}">
+                    编辑
+                </router-link>
+            </el-link>
+            <el-tag type="success" style="float: right">阅读量：{{blog.views}}</el-tag>
+        </div>
         <!-- 分割线 -->
         <el-divider></el-divider>
         <div class="markdown-body" v-html="blog.content">
@@ -21,6 +24,7 @@ export default {
             blog: {
                 id: '',
                 title: '',
+                views: '1',
                 content: ''
             },
             ownBlog: false
@@ -34,6 +38,7 @@ export default {
                 console.log(res)
                 _this.blog.id = res.data.data.id
                 _this.blog.title = res.data.data.title
+                _this.blog.views = res.data.data.views
 
                 // 渲染markdown
                 const MarkdownIt = require('markdown-it')
