@@ -1,7 +1,7 @@
 <template>
     <div class="m_detail">
         <h1> {{blog.title}} </h1>
-        <div>
+        <div style="min-height: 30px">
             <el-link icon="el-icon-edit" v-if="ownBlog">
                 <router-link :to="{name: 'BlogEdit', params: {blogId: blog.id}}">
                     编辑
