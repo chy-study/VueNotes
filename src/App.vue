@@ -1,6 +1,6 @@
 <template>
   <el-container ref="homePage" style="width: 100%">
-    <el-header :class="{m_down : isScroll}" v-if="$route.path!=='/login'">
+    <el-header :class="{m_down : isScroll}" v-if="$route.path!=='/login' && $route.path!=='/register'">
       <div style="margin-top: 0px">
         <h1 style="display: block; margin: 0; float: left; ">
           <a href="javascript:void(0)" @click="drawer = true"><img src="./assets/logo.png" style="width: 40px; height: 40px; margin-top: -5px"></a>
@@ -119,7 +119,7 @@
         hasLogin: false,
         user: {
           username: '请先登录',
-          avatar: 'https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png'
+          avatar: ''
         }
       }
     },

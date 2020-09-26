@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 import BlogDetail from '../views/BlogDetail.vue'
 import BlogEdit from '../views/BlogEdit.vue'
 import Echarts from '../views/Echarts.vue';
@@ -23,6 +24,11 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
   },
   {
     path: '/blogs',
@@ -54,9 +60,9 @@ Vue.use(VueRouter)
   {
     path: '/echarts',
     name: 'Echarts',
-    // meta: {
-    //   requireAuth: true
-    // },
+    meta: {
+      requireAuth: true
+    },
     component: Echarts
   },
 ]

@@ -9,11 +9,14 @@
       </canvas>
     </div>
     <div id="loginBox">
-      <h4>登录</h4>
+      <el-page-header @back="goLogin" title='返回登录' style="font-size: 9px; color: #3399ff; margin-left: -20px; margin-top: -25px">
+      </el-page-header>
+
+      <h4>注册</h4>
       <el-form
-        :model="loginForm"
-        :rules="loginRules"
-        ref="loginForm"
+        :model="registerForm"
+        :rules="registerRules"
+        ref="registerForm"
         label-width="0px"
       >
         <el-form-item
@@ -29,7 +32,7 @@
               <el-input
                 class="inps"
                 placeholder='用户名'
-                v-model="loginForm.username"
+                v-model="registerForm.username"
               ></el-input>
             </el-col>
           </el-row>
@@ -46,19 +49,35 @@
               <el-input
                 class="inps"
                 placeholder='密码'
-                v-model="loginForm.password"
+                v-model="registerForm.password"
               ></el-input>
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item style="margin-top:100px;">
+        <el-form-item
+                label=""
+                prop="verify_password"
+        >
+          <el-row>
+            <el-col :span='2'>
+              <span class="iconfont">&#xe616;</span>
+            </el-col>
+            <el-col :span='22'>
+              <el-input
+                      class="inps"
+                      placeholder='确认密码'
+                      v-model="registerForm.verify_password"
+              ></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item style="margin-top:55px;">
           <el-button
             type="primary"
             round
             class="submitBtn"
-            @click="submitForm('loginForm')"
-          >登录</el-button>
-          <el-link type="primary" :underline="false" @click="goToRegister()" style="float: right; font-size: 5px; margin-top:10px;">还没有账号？点击注册</el-link>
+            @click="submitForm('registerForm')"
+          >注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -66,6 +85,8 @@
 </template>
 
 <script>
+import ElementUI from "element-ui";
+
 export default {
   data() {
     return {
@@ -117,16 +138,21 @@ export default {
       }, //工厂模式定义Ball类
       width: window.innerHeight,
       height: window.innerHeight,
-      loginForm: {
+      registerForm: {
         username: "",
-        password: ""
+        password: "",
+        verify_password: ""
       },
-      loginRules: {
+      registerRules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
+          {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: "blur"}
+        ],
+        verify_password: [
+          { required: true, message: "请确认密码", trigger: "blur" },
           {min: 6, max: 12, message: '长度在 6 到 12 个字符', trigger: "blur"}
         ]
       }
@@ -138,24 +164,30 @@ export default {
         const _this = this
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            // 提交逻辑
-            this.$axios.post('/login', this.loginForm).then((res)=>{
-              const jwt = res.headers['authorization']
-              const userInfo = res.data.data
-              // 把数据共享出去
-              _this.$store.commit('SET_TOKEN', jwt)
-              _this.$store.commit('SET_USERINFO', userInfo)
-              _this.$router.push("/blogs")
-            })
-          } else {
+            const isEqual = (_this.registerForm.password === _this.registerForm.verify_password)
+            if (isEqual) {
+              // 提交逻辑
+              this.$axios.post('/user/register', this.registerForm).then((res)=>{
+                _this.$message({
+                  message: '恭喜你，注册成功',
+                  type: 'success'
+                });
+                _this.$router.push("/login")
+              })
+            } else {
+              ElementUI.Message.error('两次输入的密码不一致',{duration: 2*1000})
+            }
+         } else {
             console.log('error submit!!');
             return false;
           }
         });
       },
-    goToRegister() {
-      this.$router.push('/register')
+
+    goLogin() {
+      this.$router.push('/login')
     },
+
     //重复动画
     drawFrame() {
       let animation = requestAnimationFrame(this.drawFrame);
@@ -247,7 +279,7 @@ export default {
 		this.drawFrame();
 		this.$notify({
 		        title: '提示：',
-		        message: '欢迎登录',
+		        message: '欢迎注册',
 				// 向下偏移
 		        offset: 0,
 		        duration: 2000

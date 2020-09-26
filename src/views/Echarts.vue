@@ -16,6 +16,7 @@ export default {
   },
   methods:{
       lineCharts(){
+
         // 基于准备好的dom，初始化echarts实例
         var myChart = this.$echarts.init(document.getElementById('lineChart'));
 
@@ -70,19 +71,25 @@ export default {
 
         // 异步加载数据
         const _this = this
-        const userId = this.$store.getters.getUser.id
-        _this.$axios.get('/echart/currentYearBlogsByUserId?id='+userId,{
-          headers: {
-            "Authorization": localStorage.getItem("token")
-          }
-        }).then(res => {
-          myChart.setOption({
-            series: [{
-              // 根据名字对应到相应的系列
-              data: res.data.data
-            }]
-          });
-        })
+
+        if (this.$store.getters.getUser) {
+          const userId = this.$store.getters.getUser.id
+
+          _this.$axios.get('/echart/currentYearBlogsByUserId?id='+userId,{
+            headers: {
+              "Authorization": localStorage.getItem("token")
+            }
+          }).then(res => {
+            myChart.setOption({
+              series: [{
+                // 根据名字对应到相应的系列
+                data: res.data.data
+              }]
+            });
+          })
+        } else {
+
+        }
       },
     pieCharts(){
       // 基于准备好的dom，初始化echarts实例
@@ -92,7 +99,7 @@ export default {
       var option = {
         title: {
           text: '用户发表博客数目',
-          subtext: '纯属虚构',
+          subtext: '所有用户',
           left: 'center'
         },
         tooltip: {
@@ -102,7 +109,7 @@ export default {
         legend: {
           orient: 'vertical',
           left: 'right',
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          data: []
         },
         series: [
           {
@@ -111,11 +118,7 @@ export default {
             radius: '55%',
             center: ['50%', '60%'],
             data: [
-              {value: 335, name: '直接访问'},
-              {value: 310, name: '邮件营销'},
-              {value: 234, name: '联盟广告'},
-              {value: 135, name: '视频广告'},
-              {value: 1548, name: '搜索引擎'}
+
             ],
             emphasis: {
               itemStyle: {
@@ -138,13 +141,14 @@ export default {
           "Authorization": localStorage.getItem("token")
         }
       }).then(res => {
-
-        console.log(res.data.data.everyUser)
-        console.log(res.data.data.everyUserBlogCount)
+        console.log(res.data.data)
         myChart.setOption({
           legend: {
-            data: ['root', '测试用户']
+            data: res.data.data
           },
+          series: [{
+            data:res.data.data
+          }]
 
         });
 
@@ -201,9 +205,9 @@ export default {
     },
   },
   mounted() {
+    this.lineCharts();
   	this.histograms();
   	this.pieCharts();
-  	this.lineCharts();
   }
 }
 </script>
